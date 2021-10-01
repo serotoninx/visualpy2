@@ -1,0 +1,14 @@
+{
+  "name": "visualpy",
+  "version": "1.0.0",
+  "description": "a visual programming interface for python",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo"
+  },
+  "author": "serotonin",
+  "license": "ISC",
+  "dependencies": {
+    "blockly": "^6.20210701.0"
+  }
+}

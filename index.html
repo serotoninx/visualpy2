@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>visualpy</title>
+  <script src="./blockly/blockly_compressed.js"></script>
+  <script src="./blockly/blocks_compressed.js"></script>
+  <script src="./blockly/python_compressed.js"></script>
+  <script src="./blockly/msg/en.js"></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.18.1/full/pyodide.js"></script>
+  <link src="visualpy_logo.png" rel="icon" >
+  <script>
+    console.defaultLog = console.log.bind(console);
+    console.logs = [];
+    console.log = function(){
+    // default &  console.log()
+    console.defaultLog.apply(console, arguments);
+    // new & array data
+    console.logs.push(Array.from(arguments));
+    }
+    Blockly.Blocks['import'] = {
+    init: function() {
+      this.appendValueInput("module")
+          .setCheck(null)
+          .appendField("import")
+          .appendField(new Blockly.FieldTextInput("module"), "module_name");
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(230);
+   this.setTooltip("import a module");
+   this.setHelpUrl("");
+    }
+  };
+  Blockly.Blocks['from_import'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField("from")
+        .appendField(new Blockly.FieldTextInput("module.something"), "module_name")
+        .appendField("import")
+        .appendField(new Blockly.FieldTextInput("something"), "module_nm");
+    this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['call_function'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField(new Blockly.FieldTextInput(""), "function_name")
+        .appendField("(")
+        .appendField(new Blockly.FieldTextInput("default"), "params")
+        .appendField(")");
+        this.setPreviousStatement(true, null);
+          this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['call_value_function'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField(new Blockly.FieldTextInput(""), "function_name")
+        .appendField("(")
+        .appendField(new Blockly.FieldTextInput("default"), "params")
+        .appendField(")");
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['object'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField(new Blockly.FieldTextInput(""), "obj");
+    this.setColour(230);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['value_object'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField(new Blockly.FieldTextInput("default"), "obj");
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['out'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField("OUT>>");
+    this.setColour(230);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null)
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['class'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("class")
+        .appendField(new Blockly.FieldTextInput(""), "class_name")
+        .appendField("(")
+        .appendField(new Blockly.FieldTextInput(""), "inherit")
+        .appendField("):");
+    this.appendStatementInput("statements")
+        .setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['initialize_func'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("define __init__(")
+        .appendField(new Blockly.FieldTextInput("default"), "args")
+        .appendField("):");
+    this.appendStatementInput("statements")
+        .setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['return'] = {
+  init: function() {
+    this.appendValueInput("val")
+        .setCheck(null)
+        .appendField("return");
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['cast'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField("convert");
+    this.appendDummyInput()
+        .appendField("to")
+        .appendField(new Blockly.FieldDropdown([["string","str"], ["integer","int"], ["float","float"], ["boolean","bool"], ["list","list"]]), "type");
+    this.setInputsInline(true);
+    this.setColour(230);
+    this.setOutput(true, null);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+  Blockly.Python['import'] = function(block) {
+  var module_name = block.getFieldValue('module_name');
+  var value_module = Blockly.Python.valueToCode(block, 'module', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = 'import ' + module_name + '\n';
+  return code;
+  };
+  Blockly.Python['from_import'] = function(block) {
+  var module_name = block.getFieldValue('module_name');
+  var module_nm = block.getFieldValue('module_nm');
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble JavaScript into code variable.
+  var code = 'from ' + module_name + ' import ' + module_nm  + '\n';
+  return code;
+};
+Blockly.Python['call_function'] = function(block) {
+  var function_name = block.getFieldValue('function_name');
+  var params = block.getFieldValue('params');
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = function_name + "(" + params + ")" + value_name + "\n";
+  return code;
+};
+Blockly.Python['call_value_function'] = function(block) {
+  var function_name = block.getFieldValue('function_name');
+  var params = block.getFieldValue('params');
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = function_name + "(" + params + ")";
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+Blockly.Python['object'] = function(block) {
+  var obj = block.getFieldValue('obj');
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble JavaScript into code variable.
+  var code = obj + value_name + '\n';
+  return code;
+};
+Blockly.Python['value_object'] = function(block) {
+  var obj = block.getFieldValue('obj');
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = obj + value_name + '\n';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Python['out'] = function(block) {
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = value_name;
+  return "    " + code+"\n";
+};
+Blockly.Python['class'] = function(block) {
+  var text_name = block.getFieldValue('inherit');
+  var class_name = block.getFieldValue('class_name');
+  var statements_name = Blockly.Python.statementToCode(block, 'statements');
+  // TODO: Assemble Python into code variable.
+  var code = 'class ' + class_name +'(' + text_name + '):\n' + statements_name ;
+  return code;
+};
+Blockly.Python['initialize_func'] = function(block) {
+  var text_name = block.getFieldValue('args');
+  var statements_name = Blockly.Python.statementToCode(block, 'statements');
+  // TODO: Assemble Python into code variable.
+  var code = 'def __init__(' + text_name + "):\n" + statements_name;
+  return code;
+};
+Blockly.Python['return'] = function(block) {
+  var value_val = Blockly.JavaScript.valueToCode(block, 'val', Blockly.JavaScript.ORDER_ATOMIC);
+  // TODO: Assemble JavaScript into code variable.
+  var code = 'return ' + value_val + "\n";
+  return code;
+};
+Blockly.Python['cast'] = function(block) {
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  var dropdown_type = block.getFieldValue('type');
+  // TODO: Assemble Python into code variable.
+  var code = dropdown_type + "(" + value_name + ")\n";
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+  </script>
+    <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    .data{ white-space: pre;
+      border:inset;
+      background-color:black;
+      color:white;
+      height: 210px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      text-align:justify;}
+    div.inline { float:left; }
+    .clearBoth { clear:both; }
+    button{
+      height:40px; width:70px; border:outset; border-radius:16px; background-color:#f5428d; font-size:16px; color:white;
+    }
+    button:active{
+      height:40px; width:70px; border:inset; border-radius:16px; background-color:#f5428d; font-size:16px; color:white;
+    }
+    .controlpannel{height: 480px; width: 1000px; }
+    .installpannel{
+      position:fixed;bottom:30px;right:30px;
+    }
+  </style>
+</head>
+<body>
+
+    <div class = "inline"><div id="blocklyDiv" class="controlpannel"></div></div>
+    <div style="border:inset">
+    <img src="visualpy_logo.PNG" style="border:inset; border-radius:16px">
+    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+      <category name="logic" colour="%{BKY_LOGIC_HUE}">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_null"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="loops" colour="%{BKY_LOOPS_HUE}">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="BY">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category name="math" colour="%{BKY_MATH_HUE}">
+      <block type="math_number">
+        <field name="NUM">123</field>
+      </block>
+      <block type="math_arithmetic">
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_single">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">9</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_trig">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">45</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_constant"></block>
+      <block type="math_number_property">
+        <value name="NUMBER_TO_CHECK">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_round">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">3.1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_on_list"></block>
+      <block type="math_modulo">
+        <value name="DIVIDEND">
+          <shadow type="math_number">
+            <field name="NUM">64</field>
+          </shadow>
+        </value>
+        <value name="DIVISOR">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_constrain">
+        <value name="VALUE">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="LOW">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="HIGH">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
+      <block type="math_atan2">
+        <value name="X">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="Y">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="text" colour="%{BKY_TEXTS_HUE}">
+      <block type="text"></block>
+      <block type="text_join"></block>
+      <block type="text_append">
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
+      <block type="text_length">
+        <value name="VALUE">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_isEmpty">
+        <value name="VALUE">
+          <shadow type="text">
+            <field name="TEXT"></field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">{textVariable}</field>
+          </block>
+        </value>
+        <value name="FIND">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">{textVariable}</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_getSubstring">
+        <value name="STRING">
+          <block type="variables_get">
+            <field name="VAR">{textVariable}</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_changeCase">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_trim">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_print">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_prompt_ext">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="lists" colour="%{BKY_LISTS_HUE}">
+      <block type="lists_create_with">
+        <mutation items="0"></mutation>
+      </block>
+      <block type="lists_create_with"></block>
+      <block type="lists_repeat">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_length"></block>
+      <block type="lists_isEmpty"></block>
+      <block type="lists_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">{listVariable}</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">{listVariable}</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">{listVariable}</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getSublist">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">{listVariable}</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_split">
+        <value name="DELIM">
+          <shadow type="text">
+            <field name="TEXT">,</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_sort"></block>
+    </category>
+    <category name="colour" colour="%{BKY_COLOUR_HUE}">
+      <block type="colour_picker"></block>
+      <block type="colour_random"></block>
+      <block type="colour_rgb">
+        <value name="RED">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+        <value name="GREEN">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="BLUE">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="colour_blend">
+        <value name="COLOUR1">
+          <shadow type="colour_picker">
+            <field name="COLOUR">#ff0000</field>
+          </shadow>
+        </value>
+        <value name="COLOUR2">
+          <shadow type="colour_picker">
+            <field name="COLOUR">#3333ff</field>
+          </shadow>
+        </value>
+        <value name="RATIO">
+          <shadow type="math_number">
+            <field name="NUM">0.5</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <sep></sep>
+    <category name="variables" colour="%{BKY_VARIABLES_HUE}" custom="VARIABLE"></category>
+    <category name="functions" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
+    <category name="classes">
+      <block type="class"></block>
+      <block type="initialize_func"></block>
+      <block type="return"></block>
+    </category>
+    <category name="package">
+      <block type="import"></block>
+      <block type="from_import"></block>
+    </category>
+    <category name="extras">
+      <block type="call_function"></block>
+      <block type="call_value_function"></block>
+      <block type="object"></block>
+      <block type="value_object"></block>
+      <block type="out"></block>
+      <block type="cast"></block>
+
+    </category>
+  </xml>
+
+
+  <div id="codespace" class="data"></div>
+  </div>
+  <img src="serotoninlogo - Copy.png" style="width:100px; height:100px; border-radius:50px; background-color:lightblue; box-shadow: 2px 2px 3px #999; position:fixed;bottom:30px;left:30px;">
+  <script>
+
+    var workspace = Blockly.inject('blocklyDiv',
+    {toolbox: document.getElementById('toolbox'),
+    grid:
+         {spacing: 20,
+          length: 3,
+          colour: '#ccc',
+          snap: true},
+     zoom:
+         {controls: true,
+          wheel: true,
+          startScale: 1.0,
+          maxScale: 3,
+          minScale: 0.3,
+          scaleSpeed: 1.2,
+          pinch: true},
+     trashcan: true});
+
+     let pyodideReadyPromise = main();
+     code = ""
+     codespace = document.getElementById("codespace");
+     codespace.innerHTML += "Initializing...\n";
+     run();
+   function comp(){
+     codespace = document.getElementById("codespace");
+     var code = Blockly.Python.workspaceToCode(workspace);
+     code = code.split("~");
+
+     code = code.join();
+     console.log(code);
+     code = code.replace("\n","<br>")
+     codespace.innerHTML += code
+     window.setInterval(function() {
+     codespace.scrollTop = codespace.scrollHeight;
+   }, 3000);
+   }
+   async function run(){
+     codespace = document.getElementById("codespace");
+     var code = Blockly.Python.workspaceToCode(workspace);
+     code = code.split("~");
+
+     code = code.join();
+     console.log(code);
+
+     evaluatePython(code)
+     window.setInterval(function() {
+     codespace.scrollTop = codespace.scrollHeight;
+   }, 3000)
+   }
+   function addToOutput(s) {
+        codespace.innerHTML += ">>>" + code + "\n" + s + "\n";
+
+      }
+
+      codespace.innerHtml += "Initializing...\n";
+      // init Pyodide
+      async function main() {
+        let pyodide = await loadPyodide({
+          indexURL: "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/",
+        });
+        pyodide.loadPackage("numpy");
+        pyodide.loadPackage("matplotlib");
+        pyodide.loadPackage("micropip");
+        codespace.innerHTML += "Ready!\n";
+        return pyodide;
+      }
+
+
+      async function evaluatePython(cd) {
+        let pyodide = await pyodideReadyPromise;
+        try {
+          let output = pyodide.runPython(cd);
+          addToOutput(output);
+          console.logs.forEach(function (item,index){
+            codespace.innerHTML += index + "  :  " + item + "\n"
+          })
+          console.logs = []
+        } catch (err) {
+          addToOutput(err);
+        }
+      }
+      async function installpkg(){
+        pkgname = document.getElementById("pkg").value;
+        code = `import micropip
+micropip.install('` + pkgname + `')`;
+        evaluatePython(code);
+        console.log(code);
+        codespace.innerHTML += "successfuly installed " + pkgname;
+      }
+
+
+  </script>
+  <div class="installpannel">
+
+  <button onclick="comp()">compile</button>
+  <button onclick="run()">run</button>
+  <input id="pkg" placeholder="install a package" type="text">
+  <button onclick="installpkg()">install</button>
+  </div>
+
+</body>
+</html>
