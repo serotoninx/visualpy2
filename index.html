@@ -297,6 +297,14 @@ Blockly.Python['cast'] = function(block) {
       overflow-x: hidden;
       overflow-y: auto;
       text-align:justify;}
+	.codedisp{ white-space: pre;
+      border:inset;
+      background-color:black;
+      color:white;
+      height: 210px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      text-align:justify;}
     div.inline { float:left; }
     .clearBoth { clear:both; }
     button{
@@ -749,16 +757,16 @@ micropip.install('` + pkgname + `')`;
     code = code.join();
     console.log(code);
     ncode = code.replace("\n","<br>")
-	document.getElementById('codedisp').value = ncode;
+	document.getElementById('codedisp').innerHTML = ncode;
 	}
 	workspace.addChangeListener(myUpdateFunction);
  
 
   </script>
-  <div class="data"></div>
+  <div class="codedisp"></div>
   <div class="installpannel">
 
-  <button onclick="comp()">copy code</button>
+  <button onclick="comp()">copy</button>
   <button onclick="run()">run</button>
   <input id="pkg" placeholder="install a package" type="text">
   <button onclick="installpkg()">install</button>
