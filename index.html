@@ -691,8 +691,9 @@ Blockly.Python['cast'] = function(block) {
      let pyodideReadyPromise = main();
      code = ""
      codespace = document.getElementById("codespace");
+	 codespace.innerHTML += "<h1>visualpy2\n developed by serotonin</h1>";
+	 codespace.innerHTML += "------------------------------\n";
      codespace.innerHTML += "Initializing...\n";
-     run();
    function comp(){
      codespace = document.getElementById("codespace");
      var code = Blockly.Python.workspaceToCode(workspace);
@@ -725,8 +726,7 @@ Blockly.Python['cast'] = function(block) {
         codespace.innerHTML += ">>>" + code + "\n" + s + "\n";
 
       }
-
-      codespace.innerHtml += "Initializing...\n";
+	  
       // init Pyodide
       async function main() {
         let pyodide = await loadPyodide({
@@ -735,7 +735,7 @@ Blockly.Python['cast'] = function(block) {
         pyodide.loadPackage("numpy");
         pyodide.loadPackage("matplotlib");
         pyodide.loadPackage("micropip");
-        codespace.innerHTML += "Ready!\n";
+        codespace.innerHTML += "<h2>Ready!</h2>\n";
         return pyodide;
       }
 
