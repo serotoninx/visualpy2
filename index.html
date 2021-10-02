@@ -319,8 +319,9 @@ Blockly.Python['cast'] = function(block) {
     .installpannel{
       position:fixed;bottom:30px;right:30px;
     }
-	.tab{
-	
+	.selectedbtn{
+	height:40px; width:70px; border:inset; border-radius:16px; background-color:#f5428d; font-size:16px; color:white;
+
 	}
   </style>
 </head>
@@ -661,8 +662,8 @@ Blockly.Python['cast'] = function(block) {
   </xml>
   <img src="visualpy_logo.PNG" style="border:inset; border-radius:16px;">
   <div>
-  <button onclick="show('codedisp','codespace')" class="tab">code</button>
-  <button onclick="show('codespace','codedisp')" class="tab">console</button>
+  <button onclick="show('codedisp','codespace','cdbtn','cnslbtn')" class="tab" id="cdbtn">code</button>
+  <button onclick="show('codespace','codedisp','cnslbtn','cdbtn')" class="tab" id="cnslbtn">console</button>
   <div class="codedisp" id="codedisp"></div>
   <div id="codespace" class="data"></div>
   </div>
@@ -691,7 +692,7 @@ Blockly.Python['cast'] = function(block) {
      let pyodideReadyPromise = main();
      code = ""
      codespace = document.getElementById("codespace");
-	 codespace.innerHTML += "<h1>visualpy2\n developed by serotonin</h1>";
+	 codespace.innerHTML += "<h1>visualpy2\ndeveloped by serotonin</h1>";
 	 codespace.innerHTML += "------------------------------\n";
      codespace.innerHTML += "Initializing...\n";
    function comp(){
@@ -771,9 +772,11 @@ micropip.install('` + pkgname + `')`;
 	document.getElementById('codedisp').innerHTML = ncode;
 	}
 	workspace.addChangeListener(Update);
-	function show(elemid,hideid){
+	function show(elemid,hideid,btnid,hidebtn){
 	document.getElementById(elemid).style.display = 'block'
+	document.getElementById(btnid).classList.add('selectedbtn')
 	document.getElementById(hideid).style.display = 'none'
+	document.getElementById(hidebtn).classList.remove('selectedbtn')
 	}
   </script>
   
