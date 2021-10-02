@@ -302,6 +302,7 @@ Blockly.Python['cast'] = function(block) {
       background-color:white;
       color:black;
       height: 210px;
+	  left: 100px;
       overflow-x: hidden;
       overflow-y: auto;
       text-align:justify;}
@@ -317,13 +318,17 @@ Blockly.Python['cast'] = function(block) {
     .installpannel{
       position:fixed;bottom:30px;right:30px;
     }
+	.tab{
+	
+	}
   </style>
 </head>
 <body>
 
     <div class = "inline"><div id="blocklyDiv" class="controlpannel"></div></div>
     <div style="border:inset">
-    <img src="visualpy_logo.PNG" style="border:inset; border-radius:16px">
+    
+	
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
       <category name="logic" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
@@ -653,12 +658,16 @@ Blockly.Python['cast'] = function(block) {
 
     </category>
   </xml>
-
-
-  <div id="codespace" class="data"></div>
+  <img src="visualpy_logo.PNG" style="border:inset; border-radius:16px;">
+  <div>
+  <button onclick="show('codedisp','codespace')" class="tab">code</button>
+  <button onclick="show('codespace','codedisp')" class="tab">console</button>
   <div class="codedisp" id="codedisp"></div>
+  <div id="codespace" class="data"></div>
   </div>
-  <img src="serotoninlogo - Copy.png" style="width:100px; height:100px; border-radius:50px; background-color:lightblue; box-shadow: 2px 2px 3px #999; position:fixed;bottom:30px;left:30px;">
+  
+  </div>
+  <img src="serotoninlogo - Copy.png" style="width:100px; height:100px; border-radius:50px; background-color:lightblue; box-shadow: 2px 2px 3px #999; position:fixed;bottom:5px;left:5px;">
   <script>
 
     var workspace = Blockly.inject('blocklyDiv',
@@ -761,8 +770,10 @@ micropip.install('` + pkgname + `')`;
 	document.getElementById('codedisp').innerHTML = ncode;
 	}
 	workspace.addChangeListener(Update);
- 
-
+	function show(elemid,hideid){
+	document.getElementById(elemid).style.display = 'block'
+	document.getElementById(hideid).style.display = 'none'
+	}
   </script>
   
   <div class="installpannel">
