@@ -681,8 +681,10 @@ Blockly.Python['cast'] = function(block) {
 
      code = code.join();
      console.log(code);
-     code = code.replace("\n","<br>")
-     codespace.innerHTML += code
+     ncode = code.replace("\n","<br>")
+     codespace.innerHTML += ncode
+	 navigator.clipboard.writeText(code);
+	 alert("code copied to your clipboard")
      window.setInterval(function() {
      codespace.scrollTop = codespace.scrollHeight;
    }, 3000);
@@ -740,12 +742,22 @@ micropip.install('` + pkgname + `')`;
         console.log(code);
         codespace.innerHTML += "successfuly installed " + pkgname;
       }
+	function myUpdateFunction(event) {
+	var code = Blockly.Python.workspaceToCode(workspace);
+	code = code.split("~");
 
+    code = code.join();
+    console.log(code);
+    ncode = code.replace("\n","<br>")
+	document.getElementById('codedisp').value = ncode;
+	}
+	workspace.addChangeListener(myUpdateFunction);
+    <div class="data"></div>
 
   </script>
   <div class="installpannel">
 
-  <button onclick="comp()">compile</button>
+  <button onclick="comp()">copy code</button>
   <button onclick="run()">run</button>
   <input id="pkg" placeholder="install a package" type="text">
   <button onclick="installpkg()">install</button>
