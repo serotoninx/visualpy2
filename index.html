@@ -255,7 +255,7 @@ Blockly.Python['initialize_func'] = function(block) {
   return code;
 };
 Blockly.Python['return'] = function(block) {
-  var value_val = Blockly.JavaScript.valueToCode(block, 'val', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_val = Blockly.Python.valueToCode(block, 'val', Blockly.Python.ORDER_ATOMIC);
   // TODO: Assemble JavaScript into code variable.
   var code = 'return ' + value_val + "\n";
   return code;
