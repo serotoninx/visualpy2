@@ -299,8 +299,8 @@ Blockly.Python['cast'] = function(block) {
       text-align:justify;}
 	.codedisp{ white-space: pre;
       border:inset;
-      background-color:black;
-      color:white;
+      background-color:white;
+      color:black;
       height: 210px;
       overflow-x: hidden;
       overflow-y: auto;
@@ -750,7 +750,7 @@ micropip.install('` + pkgname + `')`;
         console.log(code);
         codespace.innerHTML += "successfuly installed " + pkgname;
       }
-	function myUpdateFunction(event) {
+	function Update(event) {
 	var code = Blockly.Python.workspaceToCode(workspace);
 	code = code.split("~");
 
@@ -759,11 +759,11 @@ micropip.install('` + pkgname + `')`;
     ncode = code.replace("\n","<br>")
 	document.getElementById('codedisp').innerHTML = ncode;
 	}
-	workspace.addChangeListener(myUpdateFunction);
+	workspace.addChangeListener(Update);
  
 
   </script>
-  <div class="codedisp"></div>
+  <div class="codedisp" id="codedisp"></div>
   <div class="installpannel">
 
   <button onclick="comp()">copy</button>
