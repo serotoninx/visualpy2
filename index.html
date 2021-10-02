@@ -51,6 +51,7 @@ Blockly.Blocks['call_function'] = {
   init: function() {
     this.appendValueInput("NAME")
         .setCheck(null)
+		.appendField("call function ")
         .appendField(new Blockly.FieldTextInput(""), "function_name")
         .appendField("(")
         .appendField(new Blockly.FieldTextInput("default"), "params")
@@ -66,6 +67,7 @@ Blockly.Blocks['call_value_function'] = {
   init: function() {
     this.appendValueInput("NAME")
         .setCheck(null)
+		.appendField("call function ")
         .appendField(new Blockly.FieldTextInput(""), "function_name")
         .appendField("(")
         .appendField(new Blockly.FieldTextInput("default"), "params")
@@ -80,6 +82,7 @@ Blockly.Blocks['object'] = {
   init: function() {
     this.appendValueInput("NAME")
         .setCheck(null)
+		.appendField("call class")
         .appendField(new Blockly.FieldTextInput(""), "obj");
     this.setColour(230);
     this.setPreviousStatement(true, null);
@@ -92,6 +95,7 @@ Blockly.Blocks['value_object'] = {
   init: function() {
     this.appendValueInput("NAME")
         .setCheck(null)
+		.appendField("call class")
         .appendField(new Blockly.FieldTextInput("default"), "obj");
     this.setOutput(true, null);
     this.setColour(230);
