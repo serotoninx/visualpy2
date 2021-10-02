@@ -143,6 +143,23 @@ Blockly.Blocks['initialize_func'] = {
  this.setHelpUrl("");
   }
 };
+Blockly.Blocks['class_func'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("define")
+        .appendField(new Blockly.FieldTextInput("myfunction"), "NAME")
+        .appendField("(")
+        .appendField(new Blockly.FieldTextInput(""), "ARGS")
+        .appendField(")");
+    this.appendStatementInput("NAME")
+        .setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
 Blockly.Blocks['return'] = {
   init: function() {
     this.appendValueInput("val")
@@ -239,6 +256,14 @@ Blockly.Python['return'] = function(block) {
   var value_val = Blockly.JavaScript.valueToCode(block, 'val', Blockly.JavaScript.ORDER_ATOMIC);
   // TODO: Assemble JavaScript into code variable.
   var code = 'return ' + value_val + "\n";
+  return code;
+};
+Blockly.Python['class_func'] = function(block) {
+  var text_name = block.getFieldValue('NAME');
+  var text_args = block.getFieldValue('ARGS');
+  var statements_name = Blockly.Python.statementToCode(block, 'NAME');
+  // TODO: Assemble Python into code variable.
+  var code = 'def ' + text_name + "(" + text_args + "):\n" + statements_name;
   return code;
 };
 Blockly.Python['cast'] = function(block) {
@@ -597,6 +622,7 @@ Blockly.Python['cast'] = function(block) {
     <category name="classes">
       <block type="class"></block>
       <block type="initialize_func"></block>
+      <block type="class_func"></block>
       <block type="return"></block>
     </category>
     <category name="package">
