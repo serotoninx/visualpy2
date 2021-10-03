@@ -671,7 +671,7 @@ Blockly.Python['cast'] = function(block) {
   </div>
   <img src="serotoninlogo - Copy.png" style="width:100px; height:100px; border-radius:50px; background-color:lightblue; box-shadow: 2px 2px 3px #999; position:fixed;bottom:5px;left:5px;">
   <script>
-
+     
     var workspace = Blockly.inject('blocklyDiv',
     {toolbox: document.getElementById('toolbox'),
     grid:
@@ -688,7 +688,8 @@ Blockly.Python['cast'] = function(block) {
           scaleSpeed: 1.2,
           pinch: true},
      trashcan: true});
-
+     window.LoopTrap = 1000;
+Blockly.Python.INFINITE_LOOP_TRAP = 'if --window.LoopTrap == 0: raise Exception("infinite loop")\n';
      let pyodideReadyPromise = main();
      code = ""
      codespace = document.getElementById("codespace");
