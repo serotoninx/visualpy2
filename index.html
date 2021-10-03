@@ -191,6 +191,35 @@ Blockly.Blocks['cast'] = {
  this.setHelpUrl("");
   }
 };
+Blockly.Blocks['dict_item'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("key:")
+        .appendField(new Blockly.FieldTextInput(""), "KEY")
+        .appendField("");
+    this.appendValueInput("value")
+        .setCheck(null)
+        .appendField("= value:");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['dict'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("dictionary");
+    this.appendStatementInput("items")
+        .setCheck(null);
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
   Blockly.Python['import'] = function(block) {
   var module_name = block.getFieldValue('module_name');
   var value_module = Blockly.Python.valueToCode(block, 'module', Blockly.Python.ORDER_ATOMIC);
@@ -299,6 +328,20 @@ Blockly.Python['cast'] = function(block) {
   var code = dropdown_type + "(" + value_name + ")\n";
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
+Blockly.Python['dict_item'] = function(block) {
+  var text_key = block.getFieldValue('KEY');
+  var value_value = Blockly.Python.valueToCode(block, 'value', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = "\'" + text_key + "\':" + value_value + ",\n";
+  return code;
+};
+Blockly.Python['dict'] = function(block) {
+  var statements_items = Blockly.Python.statementToCode(block, 'items');
+  // TODO: Assemble Python into code variable.
+  var code = '{\n' + statements_items + '}\n';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
   </script>
     <style>
     body {
@@ -349,8 +392,8 @@ Blockly.Python['cast'] = function(block) {
 
     <div class = "inline"><div id="blocklyDiv" class="controlpannel"></div></div>
     <div style="border:inset">
-    
-	
+
+
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
       <category name="logic" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
@@ -619,6 +662,10 @@ Blockly.Python['cast'] = function(block) {
       </block>
       <block type="lists_sort"></block>
     </category>
+    <category name="dictionaries">
+      <block type="dict"></block>
+      <block type="dict_item"></block>
+    </category>
     <category name="colour" colour="%{BKY_COLOUR_HUE}">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
@@ -687,11 +734,11 @@ Blockly.Python['cast'] = function(block) {
   <div class="codedisp" id="codedisp"></div>
   <div id="codespace" class="data"></div>
   </div>
-  
+
   </div>
   <img src="serotoninlogo - Copy.png" style="width:100px; height:100px; border-radius:50px; background-color:lightblue; box-shadow: 2px 2px 3px #999; position:fixed;bottom:5px;left:5px;">
   <script>
-     
+
     var workspace = Blockly.inject('blocklyDiv',
     {toolbox: document.getElementById('toolbox'),
     grid:
@@ -748,7 +795,7 @@ Blockly.Python.INFINITE_LOOP_TRAP = 'if --window.LoopTrap == 0: raise Exception(
         codespace.innerHTML += ">>>" + code + "\n" + s + "\n";
 
       }
-	  
+
       // init Pyodide
       async function main() {
         let pyodide = await loadPyodide({
@@ -800,7 +847,7 @@ micropip.install('` + pkgname + `')`;
 	document.getElementById(hidebtn).classList.remove('selectedbtn')
 	}
   </script>
-  
+
   <div class="installpannel">
 
   <button onclick="comp()">copy</button>
