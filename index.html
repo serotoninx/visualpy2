@@ -755,8 +755,8 @@ Blockly.Python['dict'] = function(block) {
           scaleSpeed: 1.2,
           pinch: true},
      trashcan: true});
-     window.LoopTrap = 1000;
-Blockly.Python.INFINITE_LOOP_TRAP = 'if --window.LoopTrap == 0: raise Exception("infinite loop")\n';
+
+
      let pyodideReadyPromise = main();
      code = ""
      codespace = document.getElementById("codespace");
