@@ -220,6 +220,140 @@ Blockly.Blocks['dict'] = {
  this.setHelpUrl("");
   }
 };
+  Blockly.Blocks['regexp'] = {
+    init: function() {
+      this.appendDummyInput()
+          .appendField("regular expression");
+      this.appendStatementInput("opts")
+          .setCheck(null);
+      this.setOutput(true, null);
+      this.setColour(230);
+  this.setTooltip("");
+  this.setHelpUrl("");
+    }
+  };
+  Blockly.Blocks['option'] = {
+  init: function() {
+    this.appendValueInput("option")
+        .setCheck(null)
+        .appendField("option:");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['reg_range'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField("any from");
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['reg_range_value'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField(new Blockly.FieldTextInput(""), "r1")
+        .appendField("to")
+        .appendField(new Blockly.FieldTextInput(""), "r2");
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['reg_char'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("special character:")
+        .appendField(new Blockly.FieldDropdown([["[","["], ["]","]"], ["\\","\\"], [".","."], ["^","^"], ["$","$"], ["*","*"], ["+","+"], ["?","?"], ["{","{"], ["}","}"], ["|","|"], ["(","("], [")",")"]]), "char");
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['reg_any'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("any");
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['reg_sw'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField("starts with:");
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['reg_ew'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField("ends with:");
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['reg_an'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField("0 or more occurances of:");
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['reg_ao'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField("1 or more occurances of:");
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['reg_no'] = {
+  init: function() {
+    this.appendValueInput("NAME")
+        .setCheck(null)
+        .appendField("none or one occurance of:");
+    this.setColour(230);
+    this.setOutput(true, null);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+Blockly.Blocks['reg_text'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("text"), "text");
+    this.setOutput(true, null);
+    this.setColour(230);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
   Blockly.Python['import'] = function(block) {
   var module_name = block.getFieldValue('module_name');
   var value_module = Blockly.Python.valueToCode(block, 'module', Blockly.Python.ORDER_ATOMIC);
@@ -339,6 +473,89 @@ Blockly.Python['dict'] = function(block) {
   var statements_items = Blockly.Python.statementToCode(block, 'items');
   // TODO: Assemble Python into code variable.
   var code = '{\n' + statements_items + '}\n';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+Blockly.Python['regexp'] = function(block) {
+  var statements_opts = Blockly.Python.statementToCode(block, 'opts');
+  // TODO: Assemble Python into code variable.
+  var code = 'r' + "'''" + statements_opts + "'''";
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+Blockly.Python['option'] = function(block) {
+  var value_option = Blockly.Python.valueToCode(block, 'option', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = value_option;
+  return code;
+};
+Blockly.Python['reg_range'] = function(block) {
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = "[" + value_name + "]";
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+Blockly.Python['reg_range_value'] = function(block) {
+  var text_r1 = block.getFieldValue('r1');
+  var text_r2 = block.getFieldValue('r2');
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = text_r1 + "-" + text_r2 + value_name;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+Blockly.Python['reg_char'] = function(block) {
+  var dropdown_char = block.getFieldValue('char');
+  // TODO: Assemble Python into code variable.
+  var code = '\\' + dropdown_char;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+Blockly.Python['reg_any'] = function(block) {
+  // TODO: Assemble Python into code variable.
+  var code = '*';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+Blockly.Python['reg_sw'] = function(block) {
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Python['reg_ew'] = function(block) {
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_NONE];
+};
+Blockly.Python['reg_an'] = function(block) {
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = value_name + "*";
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+Blockly.Python['reg_ao'] = function(block) {
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = value_name + "+";
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+Blockly.Python['reg_no'] = function(block) {
+  var value_name = Blockly.Python.valueToCode(block, 'NAME', Blockly.Python.ORDER_ATOMIC);
+  // TODO: Assemble Python into code variable.
+  var code = value_name + "+";
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+Blockly.Python['reg_text'] = function(block) {
+  var text_text = block.getFieldValue('text');
+  // TODO: Assemble Python into code variable.
+  var code = text_text;
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
@@ -726,6 +943,19 @@ Blockly.Python['dict'] = function(block) {
       <block type="cast"></block>
 
     </category>
+    <category name="RegEX">
+      <block type="regexp"></block>
+      <block type="option"></block>
+      <block type="reg_range"></block>
+      <block type="reg_range_value"></block>
+      <block type="reg_char"></block>
+      <block type="reg_any"></block>
+      <block type="reg_sw"></block>
+      <block type="reg_ew"></block>
+      <block type="reg_ao"></block>
+      <block type="reg_an"></block>
+      <block type="reg_no"></block>
+    </category>
   </xml>
   <img src="visualpy_logo.PNG" style="border:inset; border-radius:16px;">
   <div>
@@ -835,7 +1065,6 @@ micropip.install('` + pkgname + `')`;
 	code = code.split("~");
 
     code = code.join();
-    console.log(code);
     ncode = code.replace("\n","<br>")
 	document.getElementById('codedisp').innerHTML = ncode;
 	}
